@@ -1,50 +1,54 @@
-# Welcome to your Expo app 👋
+# **Expense Tracker Mobile App**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![**App Logo**](assets/images/app-logo.png)
 
-## Get started
+## **Overview**
 
-1. Install dependencies
+**Expense Tracker** is a **mobile app** for recording, organizing, reviewing, and analyzing personal expenses. It is built with **`React Native`** and **`Expo`** on the frontend, and **`Python Flask`** with **`SQLAlchemy`**, **`SQLite`**, **`Flask-JWT-Extended`**, and the **`Gemini API`** on the backend.
 
-   ```bash
-   npm install
-   ```
+## **Features**
 
-2. Start the app
+### **Authentication**:
+Users can **register**, **log in**, restore sessions, and access protected screens using **`JWT`** authentication.
 
-   ```bash
-    npx expo start
-   ```
+### **Expense Management**:
+Users can **add**, **edit**, **delete**, and view expenses using the backend **expenses API** and frontend state managed with **`Context API`**.
 
-In the output, you'll find options to open the app in a
+### **Categories**:
+Each user has **default categories**, can assign categories to expenses, rename categories, delete categories, and move expenses between categories.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### **Grouped All Expenses View**:
+The **All Expenses** screen groups expenses by **category**, shows totals, and expands to display category expenses ordered by most recent date.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### **AI Expense Input**:
+Users can enter expenses in **natural language**, which are parsed into structured data using the **`Gemini API`**.
 
-## Get a fresh project
+### **AI Review Flow**:
+Parsed expenses are shown in a **review screen** where users can edit values before saving.
 
-When you're ready, run:
+### **AI Commit Flow**:
+Reviewed expenses are saved to the backend, and new categories can be created automatically when needed.
 
-```bash
-npm run reset-project
-```
+### **Analytics**:
+A tab is implemented to give users a visual summary of their financial activity.
+- **Summary cards** show total spending, number of expenses, average expense value, and largest expense.
+- **Date-range filtering** is implemented with frontend state, allowing analytics to be recalculated for **7 days**, **30 days**, **90 days**, or **all time**.
+- **Category donut visualization** is implemented with **`react-native-svg`**, showing how spending is distributed across the most important categories in the selected range.
+- **Top 5 expenses** are calculated and displayed by ranking expenses by amount in the selected period.
+- **Monthly comparison** compares the current month against the previous month, helping users understand spending change over time.
+- **Last 7 days chart** is implemented as a custom frontend bar chart using native views.
+- **Last 6 months chart** is implemented as a custom monthly bar chart using the same frontend charting approach.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### **State Synchronization**:
+Expense and category updates are reflected immediately in the UI using **`Context API`** without requiring a full refetch.
 
-## Learn more
+**Expense Tracker** combines secure authentication, structured expense management, category organization, AI-assisted natural language entry, grouped expense browsing, and analytics-driven insights in a single mobile experience. The project demonstrates how **`React Native`** and **`Flask`** can be combined to build a modern **AI-enhanced finance application** with a clean architecture and user-focused workflow.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Demo
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Video demo: https://youtu.be/9nYR56yZLyk
 
-## Join the community
+## License
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**Important Notice**: This repository is publicly available for viewing only.
+Forking, cloning, or redistributing this project is NOT permitted without explicit permission.
