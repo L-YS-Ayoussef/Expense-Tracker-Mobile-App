@@ -6,6 +6,7 @@ import { AuthContext } from "../../../store/auth-context";
 import Input from "../ManageExpense/Input";
 import Button from "../UI/Button";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import AuthLogo from "./AuthLogo";
 
 function AuthForm({ isLogin, onSwitchMode }) {
   const authCtx = useContext(AuthContext);
@@ -84,7 +85,15 @@ function AuthForm({ isLogin, onSwitchMode }) {
   }
 
   return (
-    <ScrollView style={styles.root}>
+    <ScrollView
+      style={styles.root}
+      contentContainerStyle={styles.contentContainer}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.topSection}>
+        <AuthLogo />
+      </View>
+
       <View style={styles.authContainer}>
         <Text style={styles.title}>
           {isLogin ? "Welcome Back" : "Create Your Account"}
@@ -159,13 +168,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: GlobalStyles.colors.primary700,
   },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingVertical: 32,
+  },
+  topSection: {
+    alignItems: "center",
+    marginBottom: 8,
+  },
   authContainer: {
-    marginTop: 64,
     marginHorizontal: 24,
-    padding: 16,
-    borderRadius: 8,
+    padding: 18,
+    borderRadius: 14,
     backgroundColor: GlobalStyles.colors.primary800,
-    elevation: 2,
+    elevation: 3,
     shadowColor: "black",
     shadowOpacity: 0.35,
     shadowOffset: { width: 1, height: 1 },
@@ -176,9 +193,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     textAlign: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   buttons: {
-    marginTop: 8,
+    marginTop: 10,
   },
 });

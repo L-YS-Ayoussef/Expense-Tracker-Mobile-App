@@ -3,8 +3,18 @@ import { useNavigation } from "@react-navigation/native";
 
 import { GlobalStyles } from "../../../constants/styles";
 import { getFormattedDate } from "../../../util/date";
+import IconButton from "../UI/IconButton";
 
-function ExpenseItem({ id, description, amount, date, category_name }) {
+function ExpenseItem({
+  id,
+  description,
+  amount,
+  date,
+  category_name,
+  hideCategoryBadge = false,
+  showMoveButton = false,
+  onMovePress,
+}) {
   const navigation = useNavigation();
 
   function expensePressHandler() {
@@ -14,11 +24,14 @@ function ExpenseItem({ id, description, amount, date, category_name }) {
   }
 
   return (
-    <Pressable
-      onPress={expensePressHandler}
-      style={({ pressed }) => pressed && styles.pressed}
-    >
-      <View style={styles.expenseItem}>
+    <View style={styles.expenseItem}>
+      <Pressable
+        onPress={expensePressHandler}
+        style={({ pressed }) => [
+          styles.pressableArea,
+          pressed && styles.pressed,
+        ]}
+      >
         <View style={styles.leftSection}>
           <Text style={[styles.textBase, styles.description]}>
             {description}
@@ -26,7 +39,7 @@ function ExpenseItem({ id, description, amount, date, category_name }) {
 
           <View style={styles.metaRow}>
             <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
-            {category_name ? (
+            {!hideCategoryBadge && category_name ? (
               <View style={styles.categoryBadge}>
                 <Text style={styles.categoryText}>{category_name}</Text>
               </View>
@@ -37,8 +50,19 @@ function ExpenseItem({ id, description, amount, date, category_name }) {
         <View style={styles.amountContainer}>
           <Text style={styles.amount}>{amount.toFixed(2)}</Text>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+
+      {showMoveButton ? (
+        <View style={styles.moveButtonContainer}>
+          <IconButton
+            icon="swap-horizontal-outline"
+            size={22}
+            color="white"
+            onPress={onMovePress}
+          />
+        </View>
+      ) : null}
+    </View>
   );
 }
 
@@ -49,17 +73,23 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
   expenseItem: {
-    padding: 12,
     marginVertical: 8,
     backgroundColor: GlobalStyles.colors.primary500,
-    flexDirection: "row",
-    justifyContent: "space-between",
     borderRadius: 6,
     elevation: 3,
     shadowColor: GlobalStyles.colors.gray500,
     shadowRadius: 4,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.4,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  pressableArea: {
+    flex: 1,
+    padding: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   leftSection: {
     flex: 1,
@@ -102,5 +132,8 @@ const styles = StyleSheet.create({
   amount: {
     color: GlobalStyles.colors.primary500,
     fontWeight: "bold",
+  },
+  moveButtonContainer: {
+    paddingRight: 6,
   },
 });

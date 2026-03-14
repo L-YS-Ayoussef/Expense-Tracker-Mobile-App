@@ -5,6 +5,8 @@ export const CategoriesContext = createContext({
   setCategories: (categories) => {},
   addCategory: (category) => {},
   addCategories: (categories) => {},
+  updateCategory: (id, categoryData) => {},
+  deleteCategory: (id) => {},
 });
 
 function sortCategories(categories) {
@@ -34,6 +36,19 @@ function categoriesReducer(state, action) {
       return sortCategories(merged);
     }
 
+    case "UPDATE": {
+      const updatedCategories = state.map((category) =>
+        category.id === action.payload.id
+          ? { ...category, ...action.payload.data }
+          : category,
+      );
+
+      return sortCategories(updatedCategories);
+    }
+
+    case "DELETE":
+      return state.filter((category) => category.id !== action.payload);
+
     default:
       return state;
   }
@@ -54,11 +69,21 @@ function CategoriesContextProvider({ children }) {
     dispatch({ type: "ADD_MANY", payload: categories });
   }
 
+  function updateCategory(id, categoryData) {
+    dispatch({ type: "UPDATE", payload: { id, data: categoryData } });
+  }
+
+  function deleteCategory(id) {
+    dispatch({ type: "DELETE", payload: id });
+  }
+
   const value = {
     categories: categoriesState,
     setCategories,
     addCategory,
     addCategories,
+    updateCategory,
+    deleteCategory,
   };
 
   return (

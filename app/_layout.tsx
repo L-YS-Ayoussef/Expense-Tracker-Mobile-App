@@ -12,6 +12,7 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import TextExpenseInputScreen from "./screens/TextExpenseInputScreen";
 import AIExpenseReviewScreen from "./screens/AIExpenseReviewScreen";
+import AnalyticsScreen from "./screens/AnalyticsScreen";
 
 import { GlobalStyles } from "../constants/styles";
 import IconButton from "./components/UI/IconButton";
@@ -88,6 +89,17 @@ function ExpensesOverview() {
           tabBarLabel: "All Expenses",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" size={size} color={color} />
+          ),
+        }}
+      />
+      <BottomTabs.Screen
+        name="Analytics"
+        component={AnalyticsScreen}
+        options={{
+          title: "Analytics",
+          tabBarLabel: "Analytics",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="stats-chart" size={size} color={color} />
           ),
         }}
       />

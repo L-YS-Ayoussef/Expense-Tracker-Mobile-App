@@ -7,6 +7,8 @@ export const ExpensesContext = createContext({
   setExpenses: (expenses) => {},
   deleteExpense: (id) => {},
   updateExpense: (id, expenseData) => {},
+  renameCategoryOnExpenses: (categoryId, newName) => {},
+  reassignCategoryForExpenses: (fromCategoryId, targetCategory) => {},
 });
 
 function sortExpenses(expenses) {
@@ -24,10 +26,14 @@ function expensesReducer(state, action) {
     case "SET":
       return sortExpenses(action.payload);
 
-    case "UPDATE":
+    case "UPDATE": {
       const updatableExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id,
       );
+
+      if (updatableExpenseIndex === -1) {
+        return state;
+      }
 
       const updatableExpense = state[updatableExpenseIndex];
       const updatedItem = { ...updatableExpense, ...action.payload.data };
@@ -36,9 +42,40 @@ function expensesReducer(state, action) {
       updatedExpenses[updatableExpenseIndex] = updatedItem;
 
       return sortExpenses(updatedExpenses);
+    }
 
     case "DELETE":
       return state.filter((expense) => expense.id !== action.payload);
+
+    case "RENAME_CATEGORY_ON_EXPENSES":
+      return state.map((expense) =>
+        expense.category_id === action.payload.categoryId
+          ? { ...expense, category_name: action.payload.newName }
+          : expense,
+      );
+
+    case "REASSIGN_CATEGORY_FOR_EXPENSES":
+      return sortExpenses(
+        state.map((expense) => {
+          if (expense.category_id !== action.payload.fromCategoryId) {
+            return expense;
+          }
+
+          if (!action.payload.targetCategory) {
+            return {
+              ...expense,
+              category_id: null,
+              category_name: null,
+            };
+          }
+
+          return {
+            ...expense,
+            category_id: action.payload.targetCategory.id,
+            category_name: action.payload.targetCategory.name,
+          };
+        }),
+      );
 
     default:
       return state;
@@ -65,7 +102,21 @@ function ExpensesContextProvider({ children }) {
   }
 
   function updateExpense(id, expenseData) {
-    dispatch({ type: "UPDATE", payload: { id: id, data: expenseData } });
+    dispatch({ type: "UPDATE", payload: { id, data: expenseData } });
+  }
+
+  function renameCategoryOnExpenses(categoryId, newName) {
+    dispatch({
+      type: "RENAME_CATEGORY_ON_EXPENSES",
+      payload: { categoryId, newName },
+    });
+  }
+
+  function reassignCategoryForExpenses(fromCategoryId, targetCategory) {
+    dispatch({
+      type: "REASSIGN_CATEGORY_FOR_EXPENSES",
+      payload: { fromCategoryId, targetCategory },
+    });
   }
 
   const value = {
@@ -75,6 +126,8 @@ function ExpensesContextProvider({ children }) {
     setExpenses,
     deleteExpense,
     updateExpense,
+    renameCategoryOnExpenses,
+    reassignCategoryForExpenses,
   };
 
   return (
