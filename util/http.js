@@ -1,14 +1,5 @@
-import axios from "axios";
+import { api } from "./api";
 import { getFormattedDate, parseExpenseDate } from "./date";
-
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
-
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
 
 function normalizeExpense(expense) {
   return {
@@ -16,6 +7,9 @@ function normalizeExpense(expense) {
     description: expense.description,
     amount: Number(expense.amount),
     date: parseExpenseDate(expense.date),
+    category_id: expense.category_id ?? null,
+    category_name: expense.category_name ?? null,
+    source: expense.source ?? "manual",
   };
 }
 
@@ -24,16 +18,17 @@ function serializeExpense(expenseData) {
     description: expenseData.description,
     amount: Number(expenseData.amount),
     date: getFormattedDate(expenseData.date),
+    category_id: expenseData.category_id ?? null,
   };
 }
 
 export async function fetchExpenses() {
-  const response = await api.get("/expenses");
+  const response = await api.get("/expenses/");
   return response.data.map(normalizeExpense);
 }
 
 export async function storeExpense(expenseData) {
-  const response = await api.post("/expenses", serializeExpense(expenseData));
+  const response = await api.post("/expenses/", serializeExpense(expenseData));
   return normalizeExpense(response.data);
 }
 

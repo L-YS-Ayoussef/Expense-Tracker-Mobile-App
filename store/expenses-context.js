@@ -2,10 +2,10 @@ import { createContext, useReducer } from "react";
 
 export const ExpensesContext = createContext({
   expenses: [],
-  addExpense: ({ description, amount, date }) => {},
+  addExpense: ({ description, amount, date, category_id, category_name }) => {},
   setExpenses: (expenses) => {},
   deleteExpense: (id) => {},
-  updateExpense: (id, { description, amount, date }) => {},
+  updateExpense: (id, expenseData) => {},
 });
 
 function sortExpenses(expenses) {
@@ -62,10 +62,10 @@ function ExpensesContextProvider({ children }) {
 
   const value = {
     expenses: expensesState,
-    setExpenses: setExpenses,
-    addExpense: addExpense,
-    deleteExpense: deleteExpense,
-    updateExpense: updateExpense,
+    setExpenses,
+    addExpense,
+    deleteExpense,
+    updateExpense,
   };
 
   return (

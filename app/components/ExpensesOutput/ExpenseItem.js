@@ -1,15 +1,15 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-import { GlobalStyles } from '../../../constants/styles';
-import { getFormattedDate } from '../../../util/date';
+import { GlobalStyles } from "../../../constants/styles";
+import { getFormattedDate } from "../../../util/date";
 
-function ExpenseItem({ id, description, amount, date }) {
+function ExpenseItem({ id, description, amount, date, category_name }) {
   const navigation = useNavigation();
 
   function expensePressHandler() {
-    navigation.navigate('ManageExpense', {
-      expenseId: id
+    navigation.navigate("ManageExpense", {
+      expenseId: id,
     });
   }
 
@@ -19,12 +19,21 @@ function ExpenseItem({ id, description, amount, date }) {
       style={({ pressed }) => pressed && styles.pressed}
     >
       <View style={styles.expenseItem}>
-        <View>
+        <View style={styles.leftSection}>
           <Text style={[styles.textBase, styles.description]}>
             {description}
           </Text>
-          <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
+
+          <View style={styles.metaRow}>
+            <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
+            {category_name ? (
+              <View style={styles.categoryBadge}>
+                <Text style={styles.categoryText}>{category_name}</Text>
+              </View>
+            ) : null}
+          </View>
         </View>
+
         <View style={styles.amountContainer}>
           <Text style={styles.amount}>{amount.toFixed(2)}</Text>
         </View>
@@ -43,8 +52,8 @@ const styles = StyleSheet.create({
     padding: 12,
     marginVertical: 8,
     backgroundColor: GlobalStyles.colors.primary500,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderRadius: 6,
     elevation: 3,
     shadowColor: GlobalStyles.colors.gray500,
@@ -52,25 +61,46 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.4,
   },
+  leftSection: {
+    flex: 1,
+    marginRight: 12,
+  },
   textBase: {
     color: GlobalStyles.colors.primary50,
   },
   description: {
     fontSize: 16,
-    marginBottom: 4,
-    fontWeight: 'bold',
+    marginBottom: 6,
+    fontWeight: "bold",
+  },
+  metaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  categoryBadge: {
+    backgroundColor: GlobalStyles.colors.primary100,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 999,
+  },
+  categoryText: {
+    color: GlobalStyles.colors.primary700,
+    fontSize: 12,
+    fontWeight: "bold",
   },
   amountContainer: {
     paddingHorizontal: 12,
     paddingVertical: 4,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 4,
     minWidth: 80,
   },
   amount: {
     color: GlobalStyles.colors.primary500,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

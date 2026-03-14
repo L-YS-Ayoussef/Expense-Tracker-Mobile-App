@@ -1,30 +1,32 @@
-import { useContext, useLayoutEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useContext, useLayoutEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
-import ExpenseForm from '../components/ManageExpense/ExpenseForm';
-import ErrorOverlay from '../components/UI/ErrorOverlay';
-import IconButton from '../components/UI/IconButton';
-import LoadingOverlay from '../components/UI/LoadingOverlay';
-import { GlobalStyles } from '../../constants/styles';
-import { ExpensesContext } from '../../store/expenses-context';
-import { storeExpense, updateExpense, deleteExpense } from '../../util/http';
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
+import IconButton from "../components/UI/IconButton";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
+import { GlobalStyles } from "../../constants/styles";
+import { ExpensesContext } from "../../store/expenses-context";
+import { CategoriesContext } from "../../store/categories-context";
+import { storeExpense, updateExpense, deleteExpense } from "../../util/http";
 
 function ManageExpense({ route, navigation }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState();
 
   const expensesCtx = useContext(ExpensesContext);
+  const categoriesCtx = useContext(CategoriesContext);
 
-  const editedExpenseId = route.params?.expenseId; // '?' checks if "route.params" is undefined or not 
+  const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
 
   const selectedExpense = expensesCtx.expenses.find(
-    (expense) => expense.id === editedExpenseId
+    (expense) => expense.id === editedExpenseId,
   );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: isEditing ? 'Edit Expense' : 'Add Expense',
+      title: isEditing ? "Edit Expense" : "Add Expense",
     });
   }, [navigation, isEditing]);
 
@@ -75,10 +77,11 @@ function ManageExpense({ route, navigation }) {
   return (
     <View style={styles.container}>
       <ExpenseForm
-        submitButtonLabel={isEditing ? 'Update' : 'Add'}
+        submitButtonLabel={isEditing ? "Update" : "Add"}
         onSubmit={confirmHandler}
         onCancel={cancelHandler}
         defaultValues={selectedExpense}
+        categories={categoriesCtx.categories}
       />
       {isEditing && (
         <View style={styles.deleteContainer}>
@@ -107,8 +110,6 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
-
-
