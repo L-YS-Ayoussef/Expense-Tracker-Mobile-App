@@ -2,7 +2,8 @@ import { createContext, useReducer } from "react";
 
 export const ExpensesContext = createContext({
   expenses: [],
-  addExpense: ({ description, amount, date, category_id, category_name }) => {},
+  addExpense: (expenseData) => {},
+  addExpenses: (expenses) => {},
   setExpenses: (expenses) => {},
   deleteExpense: (id) => {},
   updateExpense: (id, expenseData) => {},
@@ -16,6 +17,9 @@ function expensesReducer(state, action) {
   switch (action.type) {
     case "ADD":
       return sortExpenses([action.payload, ...state]);
+
+    case "ADD_MANY":
+      return sortExpenses([...action.payload, ...state]);
 
     case "SET":
       return sortExpenses(action.payload);
@@ -48,6 +52,10 @@ function ExpensesContextProvider({ children }) {
     dispatch({ type: "ADD", payload: expenseData });
   }
 
+  function addExpenses(expenses) {
+    dispatch({ type: "ADD_MANY", payload: expenses });
+  }
+
   function setExpenses(expenses) {
     dispatch({ type: "SET", payload: expenses });
   }
@@ -62,8 +70,9 @@ function ExpensesContextProvider({ children }) {
 
   const value = {
     expenses: expensesState,
-    setExpenses,
     addExpense,
+    addExpenses,
+    setExpenses,
     deleteExpense,
     updateExpense,
   };

@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,6 +10,8 @@ import RecentExpenses from "./screens/RecentExpenses";
 import AllExpenses from "./screens/AllExpenses";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import TextExpenseInputScreen from "./screens/TextExpenseInputScreen";
+import AIExpenseReviewScreen from "./screens/AIExpenseReviewScreen";
 
 import { GlobalStyles } from "../constants/styles";
 import IconButton from "./components/UI/IconButton";
@@ -45,14 +48,24 @@ function ExpensesOverview() {
           />
         ),
         headerRight: ({ tintColor }) => (
-          <IconButton
-            icon="add"
-            size={24}
-            color={tintColor}
-            onPress={() => {
-              navigation.navigate("ManageExpense");
-            }}
-          />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <IconButton
+              icon="chatbubble-ellipses-outline"
+              size={22}
+              color={tintColor}
+              onPress={() => {
+                navigation.navigate("TextExpenseInput");
+              }}
+            />
+            <IconButton
+              icon="add"
+              size={24}
+              color={tintColor}
+              onPress={() => {
+                navigation.navigate("ManageExpense");
+              }}
+            />
+          </View>
         ),
       })}
     >
@@ -142,6 +155,20 @@ function AuthenticatedAppContent() {
         component={ManageExpense}
         options={{
           presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="TextExpenseInput"
+        component={TextExpenseInputScreen}
+        options={{
+          title: "AI Expense Input",
+        }}
+      />
+      <Stack.Screen
+        name="AIExpenseReview"
+        component={AIExpenseReviewScreen}
+        options={{
+          title: "Review AI Expenses",
         }}
       />
     </Stack.Navigator>

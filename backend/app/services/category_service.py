@@ -36,3 +36,38 @@ def get_user_categories(user_id: int):
         .order_by(Category.name.asc())
         .all()
     )
+
+
+def get_user_category_by_id(user_id: int, category_id: int):
+    return Category.query.filter_by(id=category_id, user_id=user_id).first()
+
+
+def get_user_category_by_name(user_id: int, name: str):
+    normalized_name = normalize_category_name(name)
+    return Category.query.filter_by(
+        user_id=user_id,
+        normalized_name=normalized_name,
+    ).first()
+
+
+def get_or_create_user_category(user_id: int, name: str):
+    clean_name = (name or "").strip()
+    if not clean_name:
+        raise ValueError("Category name is required")
+
+    existing_category = get_user_category_by_name(user_id, clean_name)
+    if existing_category:
+        return existing_category, False
+
+    category = Category(
+        user_id=user_id,
+        name=clean_name,
+        normalized_name=normalize_category_name(clean_name),
+        color="#6b7280",
+        icon="pricetag",
+        is_system=False,
+    )
+    db.session.add(category)
+    db.session.flush()
+
+    return category, True

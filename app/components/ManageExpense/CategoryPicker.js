@@ -9,6 +9,7 @@ function CategoryPicker({
   onValueChange,
   categories,
   invalid,
+  extraItems = [],
 }) {
   return (
     <View style={styles.inputContainer}>
@@ -27,7 +28,16 @@ function CategoryPicker({
           style={styles.picker}
           dropdownIconColor="white"
         >
+          {extraItems.map((item) => (
+            <Picker.Item
+              key={item.value}
+              label={item.label}
+              value={item.value}
+            />
+          ))}
+
           <Picker.Item label="Uncategorized" value="" />
+
           {categories.map((category) => (
             <Picker.Item
               key={category.id}

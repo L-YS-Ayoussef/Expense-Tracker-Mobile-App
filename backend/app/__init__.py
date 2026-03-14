@@ -1,6 +1,7 @@
 from flask import Flask
 from .config import Config
 from .extensions import db, migrate, jwt, cors
+from .routes.ai import ai_bp
 
 def create_app():
     app = Flask(__name__)
@@ -24,5 +25,6 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(categories_bp, url_prefix="/api/categories")
     app.register_blueprint(expenses_bp, url_prefix="/api/expenses")
+    app.register_blueprint(ai_bp, url_prefix="/api/ai")
 
     return app
